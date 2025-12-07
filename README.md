@@ -1,121 +1,96 @@
-# Swire Coca-Cola: Predicting Cart Abandonment on MyCoke360
+# Swire Coca-Cola: Predicting Cart Abandonment on MyCoke360  
 
-## Overview  
-This project focuses on predicting cart abandonment behavior on MyCoke360, Swire Coca-Cola’s B2B ordering platform.  
-Many customers add products to their carts but fail to complete the purchase before the order window closes.  
-
-The goal of this project is to develop a machine learning model that predicts which customers are likely to abandon their carts within the first 30% of their GA4 (Google Analytics) event window, allowing the business to intervene early and reduce lost revenue.  
+## Project Overview  
+This project was completed in collaboration with **Hung Duong, Finlay, Sudeeptha, and Shawal** using **real business data from Swire Coca-Cola**.  
+Our goal was to use data analytics and machine learning to **predict cart abandonment behavior** on Swire’s **MyCoke360** B2B ordering platform.  
 
 ---
 
-## Business Problem  
-MyCoke360 faces a significant cart abandonment challenge:  
-- 14.6% of carts that start with an Add-to-Cart event are never purchased.  
-- This results in approximately $2.87 million in potential lost revenue per order cycle.  
-- Certain customer segments and operational modes experience higher abandonment, such as Restaurants, Hotels, and the “Tell Sell” distribution channel.  
+## Understanding Cart Abandonment  
+Cart abandonment occurs when customers add items to their online cart but fail to complete their purchase before the order window closes.  
 
-The goal is to identify these at-risk carts early and design targeted interventions such as reminders, incentives, or improved user experience flow.  
+For Swire Coca-Cola, this issue represents a major challenge on the MyCoke360 platform, where:  
+- A significant portion of carts that begin with “Add to Cart” events never result in completed orders.  
+- This leads to lost sales opportunities, operational inefficiencies, and lower customer satisfaction.  
 
----
-
-## Objectives  
-- Build a supervised learning model to predict cart abandonment within the first 30% of the order window.  
-- Improve Swire’s ability to target interventions for high-risk customers.  
-- Quantify potential financial recovery under different success rates.  
-- Provide actionable insights for business and operational improvement.  
+Our project focused on identifying these at-risk customers **within the first 30% of the order window**, allowing for early interventions such as reminders, incentives, or personalized outreach.  
 
 ---
 
-## Data and Methodology  
+## Key Results  
+We trained multiple supervised learning models, including Logistic Regression and XGBoost, to predict the likelihood of cart abandonment.  
 
-### 1. Data Sources  
-We combined multiple data tables to create unique customer-level order windows:  
-- Orders  
-- Sales  
-- Visit Plans  
-- Cutoff Times  
-- Google Analytics (GA4)  
+Our final model, built using XGBoost, achieved:  
+- **Accuracy:** 81.8%  
+- **Recall:** 71.2%  
 
-### 2. Label Definition  
-A customer is labeled as “abandoned” if they added to cart but did not place an order within their order window.  
-
-### 3. Feature Engineering  
-- Built rolling customer windows (anchor-based).  
-- Computed cart-to-purchase ratios and timing features.  
-- Aggregated GA events per window.  
-- Aligned all timestamps in customer-local time zones.  
+We prioritized **recall** since the business impact of missing a potential abandoner is greater than mistakenly targeting a customer who would have completed the purchase anyway.  
+This model allows Swire Coca-Cola to capture most abandonment cases early and target them effectively to recover potential revenue.  
 
 ---
 
-## Exploratory Data Analysis (EDA)  
-
-Key insights:  
-- Overall Abandonment Rate: 14.6%  
-- Highest by Customer Type: Restaurants, Stores, Hotels (~15–17%)  
-- Distribution Mode: “Tell Sell” shows ~30% abandonment  
-- Shipping Condition: Longer 72-hour delivery windows → ~22% abandonment; shorter 24–48-hour → ~10–15%.  
-
-These findings suggested that customer type, shipping speed, and channel are strong predictors for the modeling phase.  
-
----
-
-## Modeling Approach  
-
-Two XGBoost models were trained and compared:  
-
-| Model | Accuracy | Recall | Focus |
-|:------|:---------:|:------:|:------|
-| Baseline (Balanced) | 89.2% | 43.2% | High precision, misses many abandoners |
-| Recall-Tuned | 81.8% | 71.2% | Captures more abandoners early for proactive outreach |
-
-We prioritized recall because the cost of missing a potential abandoner is much higher than mistakenly targeting an active customer.  
+## Future Recommendations  
+Based on our findings, we recommend that Swire Coca-Cola:  
+1. **Intervene early** — trigger automated reminders at 30% of each order window.  
+2. **Focus on high-risk customer types** such as restaurants, hotels, and stores.  
+3. **Improve checkout flow** — reduce friction between Add-to-Cart and payment completion.  
+4. **Optimize distribution modes** — address high abandonment in “Tell Sell” operations.  
+5. **Incentivize faster shipping options** — customers with shorter delivery windows are less likely to abandon.  
+6. **Continue model retraining** as new Google Analytics data becomes available to adapt to changing behavior.  
 
 ---
 
-## Key GA4 Events  
-Frequent events linked to abandonment:  
-- update_cart  
-- button_click  
-- ContinueShopping_Cart_Clicked  
-- user_engagement  
-- SelectAll_Cart_Unchecked  
+## File Guidance  
 
-Events linked to successful conversions:  
-- add_payment_info  
-- begin_checkout  
-- SelectAll_Cart_Checked  
+This repository documents our full workflow from data exploration to modeling and presentation.  
+Below is a short guide to help navigate each file and its purpose.
 
----
+### 1. Exploratory Data Analysis (EDA)
+Each team member conducted individual EDA to understand different aspects of the data.  
+These analyses were later merged into our consolidated files:  
+- `Sql&SodaFinal.ipynb` – Combined EDA notebook with visualizations and insights.  
+- `Sql&SodaFinal.html` – HTML export for easy viewing.  
 
-## Recommendations  
-
-1. Target early interventions at the 30% mark of the GA event window.  
-2. Focus marketing and reminders on Restaurant, Store, and Hotel customers.  
-3. Reduce friction in the checkout process (simplify Add-to-Cart → Purchase flow).  
-4. Address Tell Sell performance — optimize communication and ordering process.  
-5. Shorten or incentivize faster shipping to reduce long-window abandonment.  
+These files explore customer types, order frequency, abandonment rates, and relationships between order behavior and GA4 events.
 
 ---
 
-## Financial Impact Simulation  
+### 2. Data Engineering
+We created a **master table** to unify all sources and generate customer-level order windows.  
+This included dynamically adjusting for each customer’s **changing order frequency** and **cutoff time** to define their purchasing window.  
 
-| Intervention Success Rate | Carts Saved | Revenue Recovered |
-|:--------------------------:|:------------:|:------------------:|
-| 5%  | 101  | $102,037 |
-| 15% | 304  | $306,113 |
-| 25% | 507  | $510,189 |
-| 50% | 1,015 | $1,020,378 |
-| 75% | 1,523 | $1,530,567 |
-
-A modest 25% success rate could recover over $500K in potential revenue.  
+The output of this process is stored in:  
+- `new_master.csv` – The cleaned, structured dataset with exploded window-level orders for each customer.
 
 ---
 
-## Future Scope  
-- Apply customer segmentation to tailor reminders and promotions.  
-- Continuously retrain models with new GA4 behavioral data.  
-- Integrate real-time prediction APIs into MyCoke360’s CRM system.  
-- Develop dashboards to monitor abandonment in near real-time.  
+### 3. Modeling
+We integrated modeling work from all team members into a final, unified notebook.  
+
+The following files represent different stages and iterations of model development:  
+- `Finaly-modeling.ipynb`  
+- `Modelling_Final.ipynb`  
+- `sudeeptha-Copy1.ipynb`  
+- `hung_modeling.ipynb`  
+
+After extensive synthesis, we consolidated these approaches into:  
+- `modeling_new_logic copy 2.ipynb` – The final modeling notebook where the **XGBoost model** was trained and optimized.  
+This file contains our finalized feature set, parameter tuning, and model evaluation metrics.  
+
+---
+
+### 4. Presentation
+Our business presentation summarizing findings, visuals, and recommendations can be viewed here:  
+- [`Swire Coca Cola.pdf`](Swire%20Coca%20Cola.pdf)
+
+This presentation outlines the business problem, analytical process, key insights, model performance, and actionable strategies for Swire’s decision-makers.
+
+---
+
+## Summary
+Through this collaboration, we successfully demonstrated how predictive analytics can identify customers at risk of cart abandonment and provide meaningful recommendations to recover lost revenue and improve user engagement on MyCoke360.  
+
+The project combines **real business data**, **data engineering**, **machine learning modeling**, and **business storytelling** to deliver actionable insights for Swire Coca-Cola’s digital sales operations.
 
 ---
 
