@@ -1,7 +1,7 @@
 # Swire Coca-Cola: Predicting Cart Abandonment on MyCoke360  
 
 ## Project Overview  
-This project was completed in collaboration with **Hung Duong, Finlay, Sudeeptha, and Shawal** using **real business data from Swire Coca-Cola**.  
+This project was completed in collaboration with **Sudeeptha Sivarajan,Hung Duong, Finlay Dunn, and Shawal Fidal** using **real business data from Swire Coca-Cola**.  
 Our goal was to use data analytics and machine learning to **predict cart abandonment behavior** on Swire’s **MyCoke360** B2B ordering platform.  
 
 ---
@@ -68,7 +68,7 @@ The output of this process is stored in:
 We integrated modeling work from all team members into a final, unified notebook.  
 
 The following files represent different stages and iterations of model development:  
-- `Finaly-modeling.ipynb`  
+- `Finlay-Modeling.ipynb`  
 - `Modelling_Final.ipynb`  
 - `sudeeptha-Copy1.ipynb`  
 - `hung_modeling.ipynb`  
