@@ -92,8 +92,5 @@ Through this collaboration, we successfully demonstrated how predictive analytic
 
 The project combines **real business data**, **data engineering**, **machine learning modeling**, and **business storytelling** to deliver actionable insights for Swire Coca-Cola’s digital sales operations.
 
----
-
-## Repository Structure  
 
 
